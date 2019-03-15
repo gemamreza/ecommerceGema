@@ -1,8 +1,10 @@
 import React from 'react'
 import { Link,Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { userRegister } from './../1.actions'
+import { userRegister, loginWithGoogle } from './../1.actions'
 import Loader from 'react-loader-spinner'
+import firebase from 'firebase'
+import { provider } from './../support/google'
 
 class Register extends React.Component{
     state = {error : ''}
@@ -20,7 +22,7 @@ class Register extends React.Component{
                     width="50"
                     />
         }else{
-            return <button type="button"    className="btn btn-primary" style={{width:"300px"}} onClick={this.onBtnRegisterClick} ><i className="fas fa-sign-in-alt"  /> Sign Up!</button>
+            return <button type="button"  className="btn btn-primary" style={{width:"300px"}} onClick={this.onBtnRegisterClick} ><i className="fas fa-sign-in-alt"  /> Sign Up!</button>
         }
     }
 
@@ -42,6 +44,16 @@ class Register extends React.Component{
             this.props.userRegister(username,password,email,phone)
         }
     }
+
+    loginWithGoogle = () => {
+        firebase.auth().signInWithPopup(provider)
+        .then((res) => {
+            console.log(res)
+            this.props.loginWithGoogle(res.user.email)
+        })
+        .catch((err) => console.log(err))
+    }
+
     render(){
         if(this.props.user !== ""){
            return <Redirect to='/' />
@@ -84,6 +96,7 @@ class Register extends React.Component{
                                 <div className="form-group row">
                                     <div className="col-12">
                                     {this.renderLoadingOrBtn()}
+                                    <div><button className='btn border-primary mt-2' style={{width:'300px'}} onClick={this.loginWithGoogle}> Login With Google </button></div>
                                     {this.renderErrorMessege()}
                                     </div>
                                         
@@ -107,4 +120,4 @@ const mapStateToProps = (state) => {
     }
 } 
 
-export default connect(mapStateToProps,{userRegister})(Register)
+export default connect(mapStateToProps,{userRegister, loginWithGoogle})(Register)

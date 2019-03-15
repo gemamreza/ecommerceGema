@@ -4,7 +4,12 @@ import Home from './components/Home'
 import Login from './components/Login'
 import Register from './components/Register'
 import Product from './components/productList'
-import { Route ,withRouter } from 'react-router-dom' 
+import ManageProduct from './components/admin/manageProducts'
+import Product2 from './components/productIfternary'
+import ProductDetail from './components/productDetail'
+import PageNotFound from './components/pageNotFound'
+import ScrollToTop from './components/scrollToTop'
+import { Route ,withRouter, Switch} from 'react-router-dom' 
 import {connect} from 'react-redux'
 import cookie from 'universal-cookie'
 import { keepLogin } from './1.actions'
@@ -21,14 +26,23 @@ class App extends Component {
       this.props.keepLogin(terserah)
     }
   }
+  
   render() {
     return (
       <div>
           <Navbar/>
-          <Route path='/' component={Home} exact/>
-          <Route path='/login' component={Login} exact/>
-          <Route path='/register' component={Register} exact/>
-          <Route path='/product' component={Product} exact/>
+          <ScrollToTop>
+          <Switch>
+            <Route path='/' component={Home} exact/>
+            <Route path='/login' component={Login} exact/>
+            <Route path='/register' component={Register} exact/>
+            <Route path='/product' component={Product} exact/>
+            <Route path='/manageproduct' component={ManageProduct} exact />
+            <Route path='/product2' component={Product2} exact />
+            <Route path='/detailproduk/:id' component={ProductDetail} exact/>
+            <Route path='*' component={PageNotFound} exact />
+          </Switch>
+          </ScrollToTop>
       </div>
     );
   }

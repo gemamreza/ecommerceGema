@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
 import terserah from 'universal-cookie'
 import { resetUser } from './../1.actions'
+import {Redirect} from 'react-router-dom'
+import './../support/css/style.css'
 
 const objCookie = new terserah()
 class HeaderKu extends Component{
@@ -23,8 +25,9 @@ class HeaderKu extends Component{
     }
 
     onBtnLogout = () => {
-        objCookie.remove('userData')
+        objCookie.remove('userData') 
         this.props.resetUser()
+         
     }
 
     render(){
@@ -45,7 +48,6 @@ class HeaderKu extends Component{
                                         </div>
                                     </div> 
                                     </NavItem>
-                                    
                                     <NavItem>
                                         <Link to="/register"><NavLink className="btn btn-default border-secondary mr-1" style={{fontSize:"14px"}}><i className="fas fa-user-plus" /> Daftar</NavLink></Link>
                                     </NavItem>
@@ -85,6 +87,15 @@ class HeaderKu extends Component{
                                         Menu
                                         </DropdownToggle>
                                         <DropdownMenu right>
+                                        {
+                                        this.props.role === 'admin' ?
+                                        <Link to='/manageproduct'>
+                                        <DropdownItem>
+                                            Manage Product
+                                        </DropdownItem>
+                                        </Link>
+                                        : null
+                                        }
                                         <DropdownItem>
                                             Histori Transaksi
                                         </DropdownItem>
@@ -109,7 +120,8 @@ class HeaderKu extends Component{
 
 const mapStateToProps = (state) => {
     return {
-        bebas : state.user.username
+        bebas : state.user.username,
+        role : state.user.role
     }
 }
 
